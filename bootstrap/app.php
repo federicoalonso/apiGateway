@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Str;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
@@ -23,9 +24,15 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-// $app->withFacades();
+$app->withFacades();
 
-// $app->withEloquent();
+$app->withEloquent();
+
+/**
+ * regustrando archivo de configuracion(de la carpeta config/services)
+ */
+
+$app->configure('services');
 
 /*
 |--------------------------------------------------------------------------
