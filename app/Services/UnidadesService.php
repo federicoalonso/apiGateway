@@ -16,6 +16,45 @@ class UnidadesService {
     public function __construct()
     {
         $this->baseUri = config('services.unidades.base_uri');
-        
+    }
+
+    /**
+     * Obtiene la lista completa de unidades desde el servicio de unidades
+     * @return string
+     */
+    public function obtenerUnidades(){
+        return $this->performRequest('GET', '/unidades');
+    }
+
+    /**
+     * Crea una Unidad
+     * @return string
+     */
+    public function createUnidades($data){
+        return $this->performRequest('POST', '/unidad', $data);
+    }
+
+    /**
+     * Obtiene una Unidad
+     * @return string
+     */
+    public function obtenerUnidad($unidad){
+        return $this->performRequest('GET', "/unidad/{$unidad}");
+    }
+
+    /**
+     * Editar una Unidad
+     * @return string
+     */
+    public function editarUnidad($data, $unidad){
+        return $this->performRequest('PUT', "/unidad/{$unidad}", $data);
+    }
+
+    /**
+     * Eliminar una Unidad
+     * @return string
+     */
+    public function eliminarUnidad($unidad){
+        return $this->performRequest('DELETE', "/unidad/{$unidad}");
     }
 }

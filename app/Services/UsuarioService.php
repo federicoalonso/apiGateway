@@ -25,4 +25,36 @@ class UsuarioService {
     public function obtenerUsuarios(){
         return $this->performRequest('GET', '/users');
     }
+
+    /**
+     * Crea una Usuario
+     * @return string
+     */
+    public function createUsuario($data){
+        return $this->performRequest('POST', '/user', $data);
+    }
+
+    /**
+     * Obtiene una Usuario
+     * @return string
+     */
+    public function obtenerUsuario($usuario){
+        return $this->performRequest('GET', "/user/{$usuario}");
+    }
+
+    /**
+     * Editar una Usuario
+     * @return string
+     */
+    public function editarUsuario($data, $usuario){
+        return $this->performRequest('PUT', "/user/{$usuario}", $data);
+    }
+
+    /**
+     * Eliminar una Usuario
+     * @return string
+     */
+    public function eliminarUsuario($usuario){
+        return $this->performRequest('DELETE', "/user/{$usuario}");
+    }
 }

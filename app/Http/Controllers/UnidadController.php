@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\UnidadesService;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponses;
+use Illuminate\Http\Response;
 
 class UnidadController extends Controller
 {
@@ -31,6 +32,7 @@ class UnidadController extends Controller
      * @return Illuminate\Http\Response
      */
     public function index(){
+        return $this->successResponse($this->unidadesService->obtenerUnidades());
     }
 
     /**
@@ -38,13 +40,15 @@ class UnidadController extends Controller
      * @return Illuminate\Http\Response
      */
     public function store(Request $req){
+        return $this->successResponse($this->unidadesService->createUnidades($req->all()), Response::HTTP_CREATED);
     }
 
     /**
-     * Mustra la información de un unidad
+     * Mustra la información de una unidad
      * @return Illuminate\Http\Response
      */
     public function show($unidad){
+        return $this->successResponse($this->unidadesService->obtenerUnidad($unidad));
     }
 
     /**
@@ -52,6 +56,7 @@ class UnidadController extends Controller
      * @return Illuminate\Http\Response
      */
     public function update(Request $req, $unidad){
+        return $this->successResponse($this->unidadesService->editarUnidad($req->all(), $unidad));
     }
 
     /**
@@ -59,5 +64,6 @@ class UnidadController extends Controller
      * @return Illuminate\Http\Response
      */
     public function destroy($unidad){
+        return $this->successResponse($this->unidadesService->eliminarUnidad($unidad));
     }
 }
