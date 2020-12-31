@@ -48,7 +48,7 @@ class UsuarioController extends Controller
      * @return Illuminate\Http\Response
      */
     public function store(Request $req){
-        //$this->unidadesService->obtenerUnidad($req->unidad_id);
+        $this->unidadesService->obtenerUnidad($req->unidad_id);
         return $this->successResponse($this->usuarioService->createUsuario($req->all()), Response::HTTP_CREATED);
     }
 
