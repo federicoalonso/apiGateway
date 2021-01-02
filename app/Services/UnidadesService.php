@@ -13,9 +13,16 @@ class UnidadesService {
      */
     public $baseUri;
 
+    /**
+     * Clave secreta a ser utilizada en el servicio de usuarios
+     * @var string;
+     */
+    public $secret;
+
     public function __construct()
     {
         $this->baseUri = config('services.unidades.base_uri');
+        $this->secret = config('services.unidades.secret');
     }
 
     /**

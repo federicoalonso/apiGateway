@@ -35,4 +35,14 @@ trait ApiResponses
     public function errorMessage($mensaje, $code){
         return response($mensaje, $code)->header('Content-Type', 'application/json');
     }
+
+    /**
+     * Construye una respuesta de éxito
+     * @param string|array $data
+     * @param int $code
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function validResponse($data, $code = Response::HTTP_OK){
+        return response()->json(['data' =>$data], $code);
+    }
 }

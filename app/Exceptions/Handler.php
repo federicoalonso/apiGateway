@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App\Traits\ApiResponses;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
@@ -25,6 +26,7 @@ class Handler extends ExceptionHandler
         HttpException::class,
         ModelNotFoundException::class,
         ValidationException::class,
+        AuthenticationException::class,
     ];
 
     /**
@@ -56,7 +58,7 @@ class Handler extends ExceptionHandler
         if($exception instanceof HttpException){
             $code = $exception->getStatusCode();
             $message = Response::$statusTexts[$code];
-
+            
             return $this->errorResponse($message, $code);
         }
 
@@ -67,12 +69,12 @@ class Handler extends ExceptionHandler
         }
 
         if($exception instanceof AuthorizationException){
-
-            return $this->errorResponse($exception->getMessage(), Response::HTTP_FORBIDEN);
+            
+            return $this->errorResponse($exception->getMessage(), Response::HTTP_FORBIDDEN);
         }
 
         if($exception instanceof AuthenticationException){
-
+            
             return $this->errorResponse($exception->getMessage(), Response::HTTP_UNAUTHORIZED);
         }
 
@@ -90,6 +92,7 @@ class Handler extends ExceptionHandler
         if(env('APP_DEBUG', false)){
             return parent::render($request, $exception);
         }
+
         return $this->errorResponse('Error inesperado, intente nuevamente luego.', Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

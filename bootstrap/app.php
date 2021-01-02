@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -31,7 +31,11 @@ $app->withEloquent();
  * Registrar config files
  */
 $app->configure('services');
+$app->configure('auth');
+$app->configure('database');
+$app->configure('permission');
 
+$app->alias('cache', \Illuminate\Cache\CacheManager::class);  // if you don't have this already
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -81,9 +85,12 @@ $app->configure('app');
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\Authenticate::class,
+    'client.credentials' => Laravel\Passport\Http\Middleware\CheckClientCredentials::class,
+    'permission' => Spatie\Permission\Middlewares\PermissionMiddleware::class,
+    'role'       => Spatie\Permission\Middlewares\RoleMiddleware::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -101,7 +108,7 @@ $app->configure('app');
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Laravel\Passport\PassportServiceProvider::class);
 $app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
-
+$app->register(Spatie\Permission\PermissionServiceProvider::class);
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
@@ -116,7 +123,7 @@ $app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/web.php';
+    require __DIR__ . '/../routes/web.php';
 });
 
 return $app;

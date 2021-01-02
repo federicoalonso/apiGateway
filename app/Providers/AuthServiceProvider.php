@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Models\User;
+use Dusterio\LumenPassport\LumenPassport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use App\Policies\UserPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -15,7 +17,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+       //
     }
 
     /**
@@ -35,5 +37,11 @@ class AuthServiceProvider extends ServiceProvider
                 return User::where('api_token', $request->input('api_token'))->first();
             }
         });
+
+        Gate::policy(User::class, UserPolicy::class);
+        
+        LumenPassport::routes($this->app->router);
+
+        
     }
 }
