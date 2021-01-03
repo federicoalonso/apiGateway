@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Traits\ApiResponses;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use App\services\UsersServices;
+use App\Services\UnidadesServices;
 
 class UserController extends Controller
 {
@@ -17,56 +19,60 @@ class UserController extends Controller
      */
     public $usersService;
 
-    public function __construct(UsersServices $usersService)
+    public $unidadesServices;
+
+    public function __construct(UsersServices $usersService, UnidadesServices $unidadesServices)
     {
         $this->usersService = $usersService;
+        $this->unidadesServices = $unidadesServices;
     }
-/**
-     * retorna lista de usuarios
+    /**
+     * Retorna la lista de usuario
+     * @return Illuminate\Http\Response
      */
     public function index(){
 
         
-      return $this->successResponse($this->usersService->obtenerUsers());
-        
-    }
+        return $this->successResponse($this->usersService->obtenerUsuarios());
+          
+      }
+  
 
-    
     /**
-     * crea instancia de usuarios
+     * Crea una instancia de usuario
+     * @return Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $req)
     {
+        $this->unidadesServices->obtenerUnidad($req->unidad_id);
         
-
-        
+        return $this->successResponse($this->usersService->crearUsuario($req->all()), Response::HTTP_CREATED);
     }
 
     /**
-     * mostrar info de un usuario en particular
+     * Mustra la información de un usuario
+     * @return Illuminate\Http\Response
      */
-    public function show($usuario){
-
-        
-        
+    public function show($usuario)
+    {
+        return $this->successResponse($this->usersService->obtenerUsuario($usuario));
     }
 
     /**
-     * actualiza informacion de usuarios
+     * Actualiza la información de usuario
+     * @return Illuminate\Http\Response
      */
-    public function update(Request $request, $usuario){
-
-       
-
+    public function update(Request $req, $usuario)
+    {
+        return $this->successResponse($this->usersService->editarUsuario($req->all(),$usuario));
     }
 
-    
     /**
-     * remueve un usuario
+     * Destruye una usuario
+     * @return Illuminate\Http\Response
      */
-    public function destroy($usuario){
-
-      
-        
+    public function destroy($usuario)
+    {
+        return $this->successResponse($this->usersService->eliminarUsuario($usuario));
     }
 }

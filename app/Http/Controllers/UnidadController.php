@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use App\Traits\ApiResponses;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
-use App\services\UnidadesService;
+use App\Services\UnidadesServices;
 
 class UnidadController extends Controller
 {
@@ -19,11 +19,11 @@ class UnidadController extends Controller
      /**
       * servicio del que va a consumir las unidades
       */
-    public $unidadesService;
+    public $unidadesServices;
 
-    public function __construct(UnidadesService $unidadesService)
+    public function __construct(unidadesServices $unidadesServices)
     {
-        $this->unidadesService = $unidadesService;
+        $this->unidadesServices = $unidadesServices;
     }
 
     //
@@ -32,10 +32,13 @@ class UnidadController extends Controller
      * Retorna la lista de unidades
      * @return Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(){
+
         
-    }
+        return $this->successResponse($this->unidadesServices->obtenerUnidades());
+          
+      }
+  
 
     /**
      * Crea una instancia de unidad
@@ -43,7 +46,7 @@ class UnidadController extends Controller
      */
     public function store(Request $req)
     {
-        
+        return $this->successResponse($this->unidadesServices->crearUnidad($req->all()), Response::HTTP_CREATED);
     }
 
     /**
@@ -52,7 +55,7 @@ class UnidadController extends Controller
      */
     public function show($unidad)
     {
-        
+        return $this->successResponse($this->unidadesServices->obtenerUnidad($unidad));
     }
 
     /**
@@ -61,7 +64,7 @@ class UnidadController extends Controller
      */
     public function update(Request $req, $unidad)
     {
-        
+        return $this->successResponse($this->unidadesServices->editarUnidad($req->all(),$unidad));
     }
 
     /**
@@ -70,6 +73,6 @@ class UnidadController extends Controller
      */
     public function destroy($unidad)
     {
-        
+        return $this->successResponse($this->unidadesServices->eliminarUnidad($unidad));
     }
 }
